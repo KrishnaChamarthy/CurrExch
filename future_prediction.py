@@ -4,29 +4,14 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tools.sm_exceptions import ConvergenceWarning
 import warnings
-from pymongo import MongoClient
+import numpy as np
 
 # Suppress warnings for clarity
 warnings.simplefilter('ignore', ConvergenceWarning)
 
 # Function to load data from CSV
 def load_data():
-    # Connect to MongoDB
-    client = MongoClient(
-        "mongodb+srv://manasjain09082004:k4E01TlXm3eUKzGH@currexh.bnytc.mongodb.net/",
-        tls=True,
-        tlsAllowInvalidCertificates=True  # Disable certificate verification
-    )  # Adjust connection string as needed
-    db = client['sample_mflix']  # Use your database name
-    collection = db['Curr']   # Use your collection name
-
-    # Load data from MongoDB
-    data = pd.DataFrame(list(collection.find()))
-    # Drop the '_id' field if present
-    if '_id' in data.columns:
-        data.drop('_id', axis=1, inplace=True)
-
-    # Convert the 'Date' column to datetime
+    data = pd.read_csv('updated_newest.csv')
     data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
     return data
 

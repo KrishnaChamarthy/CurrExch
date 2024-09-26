@@ -2,25 +2,11 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from pymongo import MongoClient
 
-# Function to load data from MongoDB
+
+# Function to load data from CSV
 def load_data():
-    # Connect to MongoDB
-    client = MongoClient(
-        "mongodb+srv://manasjain09082004:k4E01TlXm3eUKzGH@currexh.bnytc.mongodb.net/",
-        tls=True,
-        tlsAllowInvalidCertificates=True  # Disable certificate verification
-    )  # Adjust connection string as needed
-    db = client['sample_mflix']  # Use your database name
-    collection = db['Curr']   # Use your collection name
-
-    # Load data from MongoDB
-    data = pd.DataFrame(list(collection.find()))
-    # Drop the '_id' field if present
-    if '_id' in data.columns:
-        data.drop('_id', axis=1, inplace=True)
-
+    data = pd.read_csv('updated_newest.csv')
     # Convert the 'Date' column to datetime
     data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
     return data
@@ -93,7 +79,7 @@ def calculate_stats_and_risk(data, selected_currencies, start_date, end_date):
 def main():
     st.title("Currency Trend Analysis")
 
-    # Load the currency data from MongoDB
+    # Load the currency data
     data = load_data()
 
     # User selects currencies
